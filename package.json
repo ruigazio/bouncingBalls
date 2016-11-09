@@ -1,0 +1,28 @@
+{
+  "name": "boucingballs",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "~3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-coffee": "~2.3.2",
+    "gulp-replace": "~0.5.4",
+    "coffee-script": "~1.11.1",
+    "coffee-loader": "",
+    "gutil": "~1.6.4",
+    "babel-core": "",
+    "babel-loader": "",
+    "css-loader": "~0.9.0",
+    "webpack": "",
+    "webpack-dev-server": "~1.10.0",
+    "string-builder": "~0.1.4",
+    "gulp-webpack": "~1.5.0",
+    "del": "~2.2.2"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "./test.js all"
+  }
+}
