@@ -5,18 +5,21 @@ class Manager
 		@canvas = $board
 		@ctx = $board.getContext "2d"
 		@objs = []
-		@canvasInfo =
-			offX:  @canvas.offsetLeft
-			offY:  @canvas.offsetTop
+		@bbox =
+			left:  @canvas.offsetLeft
+			top:  @canvas.offsetTop
+			bottom: @canvas.offsetTop + @canvas.height
+			right: @canvas.offsetLeft + @canvas.width
 
 		$board.addEventListener 'click', @clickHandler.bind @
 
 	clickHandler: (e) ->
-		x = e.layerX - @canvasInfo.offX
-		y = e.layerY - @canvasInfo.offY
-		@objs.push new Ball @ctx, x, y
+		x = e.layerX - @bbox.left
+		y = e.layerY - @bbox.top
+		@objs.push new Ball @bbox, @ctx, x, y
 
 	render: () ->
+		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
 		for o in @objs
 			o.draw()
 		requestAnimationFrame @render.bind @
