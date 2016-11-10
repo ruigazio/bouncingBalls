@@ -1,13 +1,15 @@
 class Ball
 	g = 9.8 #gravity m/s^2
 	minimalSpeed = 5
-	radius = 5
 	elasticity = 0.9
+	drag = 0.98
+	maxRadius = 8
+	minRadius = 4
 	WIN = 0
-	WTOP = 1
-	WRIGHT = 2
-	WBOTTOM = 3
-	WLEFT = 4
+	WTOP = 2
+	WRIGHT = 4
+	WBOTTOM = 8
+	WLEFT = 16
 
 	constructor: (canvas, ctx, x, y) ->
 		@canvas = canvas
@@ -15,12 +17,19 @@ class Ball
 		@x = x
 		@y = y
 
-		# set the time stamp - it'll be rendered imediately after instantiation
+		# set the time stamp - the ball will be rendered imediately after instantiation
 		@timeStamp = performance.now()
 
 		@speed = Math.random() + minimalSpeed
 		@dx = @speed * (Math.random() * 2 - 1) # [-1,1] left or right
-		@dy = - @speed * Math.random() # always negative => up
+		@dy = - @speed * Math.random() # [-1,0] always negative => up
+		@setRandomColor()
+		@radius = Math.random() * (maxRadius - minRadius) + minRadius
+
+	setRandomColor: ->
+		c = ->
+			Math.floor Math.random() * 255
+		@color = "rgb(#{c()},#{c()},#{c()})"
 
 	#time in seconds between frames
 	getElapsedTime: ->
@@ -28,54 +37,51 @@ class Ball
 		@timeStamp = performance.now()
 		(@timeStamp - previousTime)/1000
 
-	onWall: ->
+	onWall: ([x,y]) ->
 		touching = WIN
-		if @x < 0
-			touching = WLEFT
-		if @x > @canvas.width
-			touching = WRIGHT
-		if @y > @canvas.height
-			touching = WBOTTOM
-		if @y < 0
-			touching = WTOP
+		if (x-@radius) < 0
+			touching |= WLEFT
+		else if (x + @radius) > @canvas.width
+			touching |= WRIGHT
+		if (y+@radius) > @canvas.height
+			touching |= WBOTTOM
+		else if (y-@radius) < 0
+			touching |= WTOP
 
-		if @wallHyst
-			unless touching
-				@wallHyst = false
-			return WIN
-		else
-			if touching
-				@wallHyst = true
-			return touching
+		return touching
+
+	getUpdatedCoor: ->
+		return [ @x + @dx, @y + @dy]
 
 	setCoor: ->
-		wall =  @onWall()
-		switch wall
-			when WLEFT,WRIGHT
-				@dx = -@dx * elasticity
-			when WTOP, WBOTTOM
-				@dy = -@dy * elasticity
+		coords = @getUpdatedCoor()
+		touching =  @onWall coords
+		if !@stoppedY && touching & (WTOP | WBOTTOM)
+			@dy = -@dy * elasticity
+			if Math.abs(@dy) < 0.1
+				@stoppedY = true
 
-		@dy += g * @getElapsedTime()
-		@x += @dx
-		@y += @dy
-		if @y > @canvas.height + 12
-			@stopped = true
-			@y = @canvas.height
+		if !@stoppedX && touching & (WLEFT | WRIGHT)
+			@dx = -@dx * elasticity
+			if Math.abs(@dx) < 0.1
+				@stoppedX = true
 
-		###
-		if !(@wallHyst && Math.abs(@dy) < 0.01)
+		if !@stoppedY
 			@dy += g * @getElapsedTime()
-			@x += @dx
 			@y += @dy
-		###
+
+		if !@stoppedX
+			if @stoppedY
+				@dx = @dx * drag
+			@x += @dx
 
 	draw: ->
 		unless @stopped
 			@setCoor()
+		@ctx.fillStyle = @color
 		@ctx.beginPath()
-		@ctx.arc @x, @y, radius, 0, Math.PI*2,true
+		@ctx.arc @x, @y, @radius, 0, Math.PI*2,true
 		@ctx.closePath()
-		@ctx.stroke()
+		@ctx.fill()
 
 module.exports = Ball
