@@ -3,6 +3,7 @@ Ball = require './ball.coffee'
 class Manager
 	constructor: ($board) ->
 		@canvas = $board
+		@canvas.height = 500
 		@ctx = $board.getContext "2d"
 		@objs = []
 		@bbox =
@@ -16,7 +17,7 @@ class Manager
 	clickHandler: (e) ->
 		x = e.layerX - @bbox.left
 		y = e.layerY - @bbox.top
-		@objs.push new Ball @bbox, @ctx, x, y
+		@objs.push new Ball @canvas, @ctx, x, y
 
 	render: () ->
 		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
