@@ -13,7 +13,7 @@ class Ball
 		# it's the increment on the position with each frame
 		# which is different from an increment based on real time
 		@speed = Random.range 5, 10
-		@radius = Random.range 4, 8
+		@radius = 10 # Random.range 4, 8
 		dx = @speed * Random.range -1, 1 # [-1,1] left or right
 		dy = @speed * Random.range -1, 0 # [-1,0] always negative => up
 		@x = new Axis.Linear x, dx, @canvas.width, @radius

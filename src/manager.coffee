@@ -21,7 +21,6 @@ class Manager
 	clickHandler: (e) ->
 		x = e.layerX - @bbox.left
 		y = e.layerY - @bbox.top
-		console.log x, y, e
 		@objs.push new Ball @$canvas, @ctx, x, y
 
 	#time in seconds between frames
