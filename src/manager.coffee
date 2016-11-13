@@ -11,8 +11,8 @@ class Manager
 		@bbox =
 			left:  @$canvas.offsetLeft
 			top:  @$canvas.offsetTop
-			bottom: @$canvas.offsetTop + @$canvas.height
-			right: @$canvas.offsetLeft + @$canvas.width
+			bottom: @$canvas.offsetTop + @$canvas.height - @$canvas.clientTop
+			right: @$canvas.offsetLeft + @$canvas.width - @$canvas.clientLeft
 
 		@$canvas.addEventListener 'click', @clickHandler.bind @
 		@frameNo = 0
@@ -21,6 +21,7 @@ class Manager
 	clickHandler: (e) ->
 		x = e.layerX - @bbox.left
 		y = e.layerY - @bbox.top
+		console.log x, y, e
 		@objs.push new Ball @$canvas, @ctx, x, y
 
 	#time in seconds between frames
@@ -45,7 +46,7 @@ class Manager
 		newObjs = []
 		for o in @objs
 			o.draw()
-			unless o.discardable
+			unless o.color.isFullWhite()
 				newObjs.push o
 		@objs = newObjs
 		requestAnimationFrame @render.bind @

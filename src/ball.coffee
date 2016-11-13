@@ -1,4 +1,4 @@
-BoundedAxis = require './boundedAxis.coffee'
+Axis = require './axis.coffee'
 Random = require './random.coffee'
 Color = require './color.coffee'
 
@@ -13,25 +13,24 @@ class Ball
 		# it's the increment on the position with each frame
 		# which is different from an increment based on real time
 		@speed = Random.range 5, 10
+		@radius = Random.range 4, 8
 		dx = @speed * Random.range -1, 1 # [-1,1] left or right
 		dy = @speed * Random.range -1, 0 # [-1,0] always negative => up
-		@x = new BoundedAxis x, dx, @canvas.width
-		@y = new BoundedAxis y, dy, @canvas.height
+		@x = new Axis.Linear x, dx, @canvas.width, @radius
+		@y = new Axis.Accel y, dy, @canvas.height, @radius, gravity
 
 		@color = new Color()
-		@radius = Random.range 4, 8
 		@stopped = false
 
 
-	setNewPos: ->
+	setNextPos: ->
 		if @y.hasSpeed
-			@y.checkBounce @radius
-			@y.addSpeed gravity
+			@y.setNextPos()
 		else
 			stopped = true
 
 		if @x.hasSpeed
-			@x.checkBounce @radius
+			@x.setNextPos()
 			if !@y.hasSpeed
 				@x.scaleSpeed drag
 		else
@@ -42,10 +41,8 @@ class Ball
 			# doubles as a discarding mechanism
 			# flag object as discardable when it's full white 
 			@color.setBrighter()
-			if @color.isFullWhite()
-				@discardable = true
 		else
-			@setNewPos()
+			@setNextPos()
 		@ctx.fillStyle = @color.string
 		@ctx.beginPath()
 		@ctx.arc @x.pos, @y.pos, @radius, 0, fullCircleRadian, true
