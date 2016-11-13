@@ -1,11 +1,17 @@
 # model a component of the position and speed vector
-class CoordinateComponent
-	stopThreshold = 0.1
+class BoundedAxis
+	stopThreshold = 0.5
+	elasticity = 0.9
 
-	constructor: (@pos, @speed) ->
+	constructor: (@pos, @speed, @farEnd) ->
 		@hasSpeed = true
-		# @i = i #coordinate value
-		# @d = d #speed (d for delta)
+
+	checkBounce: (radius) ->
+		nextPos = @updatePos()
+
+		if (nextPos - radius) < 0 || (nextPos + radius) > @farEnd
+			@scaleSpeed -elasticity
+			@updatePos()
 
 	updatePos: () -> #update the coordinate value with the elapsed time
 		@pos += @speed
@@ -18,4 +24,4 @@ class CoordinateComponent
 	addSpeed: (n) ->
 		@speed += n
 
-module.exports = CoordinateComponent
+module.exports = BoundedAxis

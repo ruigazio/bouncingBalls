@@ -42,8 +42,12 @@ class Manager
 			@renderFPS()
 		elapsedTime = @setElapsedTime()
 		@ctx.clearRect 0, 0, @$canvas.width, @$canvas.height
+		newObjs = []
 		for o in @objs
-			o.draw elapsedTime
+			o.draw()
+			unless o.discardable
+				newObjs.push o
+		@objs = newObjs
 		requestAnimationFrame @render.bind @
 
 module.exports = Manager
