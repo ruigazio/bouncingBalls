@@ -15,18 +15,12 @@ gulp.task 'html', ['clean'], ->
 	gulp.src 'src/*.html'
 		.pipe gulp.dest 'dist/'
 
-gulp.task 'coffee', ->
-	gulp.src './src/*.coffee'
-	.pipe(coffee({bare: true}).on('error', gutil.log))
-	.pipe replace '.coffee', '.js'
-	.pipe gulp.dest './dist/'
-
 gulp.task 'js', ->
 	gulp.src './src/*.js'
 	.pipe gulp.dest './dist/'
 
 gulp.task 'webdist', ['html'], ->
-	gulp.src 'src/main.coffee'
+	gulp.src 'src/main.js'
 		.pipe gulpWebpack require './webpack.config.dist.coffee'
 		.pipe gulp.dest 'dist/'
 
