@@ -21,20 +21,21 @@ class Ball
 
 		@color = new Color()
 		@stopped = false
+		@stoppedX = false
 
 
 	setNextPos: ->
 		if @y.hasSpeed
 			@y.setNextPos()
 		else
-			stopped = true
+			@stoppedX ||= true
 
 		if @x.hasSpeed
 			@x.setNextPos()
 			if !@y.hasSpeed
 				@x.scaleSpeed drag
 		else
-			if stopped then @stopped = true
+			if @stoppedX then @stopped = true
 
 	draw: ->
 		if @stopped

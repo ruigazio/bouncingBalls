@@ -2,16 +2,19 @@ Random = require './random.coffee'
 
 class Color
 
-	constructor: () ->
+	constructor: (@maxLevel=250) ->
 		@setRandomColor()
 
 	setColorStr: ->
 		@string = "rgb(#{@r},#{@g},#{@b})"
 
+	setRandomMaxBrightness: (maxLevel) ->
+		@maxLevel = maxLevel
+
 	setRandomColor: ->
-		@r = Random.intUnder 255
-		@g = Random.intUnder 255
-		@b = Random.intUnder 255
+		@r = Random.intUnder @maxLevel
+		@g = Random.intUnder @maxLevel
+		@b = Random.intUnder @maxLevel
 		@setColorStr()
 
 	isFullWhite: ->

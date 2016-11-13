@@ -1,27 +1,23 @@
-# model a component of the position and speed vector
 elasticity = 0.9
 stopThreshold = 0.01
 
+# model a component of the position and speed vector
 class Linear
 	constructor: (@pos, @speed, @farEnd, @radius) ->
 		@hasSpeed = true
 		@nudgeIn()
 
 	nudgeIn: ->
-		prevPos = @pos
-		candidatePos = @pos + @speed
-		if ( distance = candidatePos - @radius) < 0
+		newPos = @pos + @speed
+		if ( newPos - @radius) < 0
 			@pos = @radius
-		else if (distance = candidatePos + @radius - @farEnd) > 0
+		else if (newPos + @radius) > @farEnd
 			@pos = @farEnd - @radius
 		else
-			@pos = candidatePos
-			return null
+			@pos = newPos
+			return false
 
-		#return the ratio of the move in case of bouncing
-		# candidateDistance = Math.abs candidatePos - prevPos
-		candidateDistance = candidatePos - prevPos
-		return distance / candidateDistance
+		return true
 
 	setNextPos: ->
 		if @nudgeIn()
@@ -37,12 +33,27 @@ class  Accel extends Linear
 	constructor: (pos, speed, farEnd, radius, @accel) ->
 		super pos, speed, farEnd, radius
 
+	nudgeIn: ->
+		prevPos = @pos
+		candidatePos = @pos + @speed
+		if ( distance = candidatePos - @radius) < 0
+			@pos = @radius
+		else if (distance = candidatePos + @radius - @farEnd) > 0
+			@pos = @farEnd - @radius
+		else
+			@pos = candidatePos
+			return null
+
+		#if there is a bounce, return the ratio of the move in case of bouncing
+		# candidateDistance = Math.abs candidatePos - prevPos
+		candidateDistance = candidatePos - prevPos
+		return distance / candidateDistance
+
 	setNextPos: ->
 		nudgeRatio = @nudgeIn()
 		if nudgeRatio == null
 			@speed += @accel
 		else
-			console.log nudgeRatio
 			@speed -= @accel * nudgeRatio
 			@scaleSpeed -elasticity
 
