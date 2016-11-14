@@ -1,7 +1,5 @@
-
-elasticity = 0.9;
-
-stopThreshold = 0.01;
+const elasticity = 0.9;
+const stopThreshold = 0.01;
 
 class Linear {
   constructor(pos1, speed1, farEnd1, radius1) {
