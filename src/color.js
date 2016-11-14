@@ -7,7 +7,7 @@ class Color {
   }
 
   setColorStr() {
-    return this.string = "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+    return this.string = `rgb(${this.r},${this.g},${this.b})`;
   }
 
   setRandomMaxBrightness(maxLevel) {
