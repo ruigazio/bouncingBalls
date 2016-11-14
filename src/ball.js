@@ -13,7 +13,7 @@ class Ball {
     this.canvas = canvas;
     this.ctx = ctx;
     this.speed = Random.range(5, 10);
-    this.radius = 10;
+    this.radius = Random.range(5, 10);
     const dx = this.speed * Random.range(-1, 1);
     const dy = this.speed * Random.range(-1, 0);
     this.x = new Axis.Linear(x, dx, this.canvas.width, this.radius);
@@ -32,11 +32,11 @@ class Ball {
     if (this.x.hasSpeed) {
       this.x.setNextPos();
       if (!this.y.hasSpeed) {
-        return this.x.scaleSpeed(drag);
+        this.x.scaleSpeed(drag);
       }
     } else {
       if (this.stoppedX) {
-        return this.stopped = true;
+        this.stopped = true;
       }
     }
   }
@@ -51,7 +51,7 @@ class Ball {
     this.ctx.beginPath();
     this.ctx.arc(this.x.pos, this.y.pos, this.radius, 0, fullCircleRadian, true);
     this.ctx.closePath();
-    return this.ctx.fill();
+    this.ctx.fill();
   }
 }
 

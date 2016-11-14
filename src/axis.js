@@ -26,14 +26,14 @@ class Linear {
 
   setNextPos() {
     if (this.nudgeIn()) {
-      return this.scaleSpeed(-elasticity);
+      this.scaleSpeed(-elasticity);
     }
   }
 
   scaleSpeed(n) {
     this.speed *= n;
     if (Math.abs(this.speed) < stopThreshold) {
-      return this.hasSpeed = false;
+      this.hasSpeed = false;
     }
   }
 }
@@ -56,7 +56,7 @@ class Accel extends Linear {
       this.pos = this.farEnd - this.radius;
     } else {
       this.pos = candidatePos;
-      return null;
+      return 0;
     }
     const candidateDistance = candidatePos - prevPos;
     return distance / candidateDistance;
@@ -64,16 +64,13 @@ class Accel extends Linear {
 
   setNextPos() {
     const nudgeRatio = this.nudgeIn();
-    if (nudgeRatio === null) {
-      return this.speed += this.accel;
-    } else {
+    if (nudgeRatio) {
       this.speed -= this.accel * nudgeRatio;
-      return this.scaleSpeed(-elasticity);
+      this.scaleSpeed(-elasticity);
+    } else {
+      this.speed += this.accel;
     }
   }
 }
 
-module.exports = {
-  Linear: Linear,
-  Accel: Accel
-};
+module.exports = {Linear, Accel};

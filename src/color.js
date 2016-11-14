@@ -1,24 +1,24 @@
 const Random = require('./random.js');
 
 class Color {
-  constructor(maxLevel1) {
-    this.maxLevel = maxLevel1 != null ? maxLevel1 : 250;
+  constructor(maxLevel = 250) {
+    this.maxLevel = maxLevel;
     this.setRandomColor();
   }
 
   setColorStr() {
-    return this.string = `rgb(${this.r},${this.g},${this.b})`;
+    this.string = `rgb(${this.r},${this.g},${this.b})`;
   }
 
   setRandomMaxBrightness(maxLevel) {
-    return this.maxLevel = maxLevel;
+    this.maxLevel = maxLevel;
   }
 
   setRandomColor() {
     this.r = Random.intUnder(this.maxLevel);
     this.g = Random.intUnder(this.maxLevel);
     this.b = Random.intUnder(this.maxLevel);
-    return this.setColorStr();
+    this.setColorStr();
   };
 
   isFullWhite() {
@@ -28,7 +28,7 @@ class Color {
   setBrighter() {
     const f = function(c) {
       if (c < 255) {
-        return ++c;
+        return c+1;
       } else {
         return c;
       }
@@ -37,7 +37,7 @@ class Color {
     this.r = f(this.r);
     this.g = f(this.g);
     this.b = f(this.b);
-    return this.setColorStr();
+    this.setColorStr();
   }
 }
 
