@@ -44,10 +44,9 @@ class  Accel extends Linear
 			@pos = candidatePos
 			return 0
 
-		#if there is a bounce, return the ratio of the move in case of bouncing
-		# candidateDistance = Math.abs candidatePos - prevPos
-		candidateDistance = candidatePos - prevPos
-		return distance / candidateDistance
+		#if there is a bounce, return the ratio of the candidate move 
+		#made outside of the boundary
+		return distance / @speed
 
 	setNextPos: ->
 		nudgeRatio = @nudgeIn()
