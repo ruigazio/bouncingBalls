@@ -58,8 +58,11 @@ class Accel extends Linear {
       this.pos = candidatePos;
       return 0;
     }
-    const candidateDistance = candidatePos - prevPos;
-    return distance / candidateDistance;
+		/*
+     if there is a bounce, return the ratio of the candidate move 
+		 made outside of the boundary
+    */
+    return distance / this.speed;
   }
 
   setNextPos() {
