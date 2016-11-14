@@ -34,7 +34,6 @@ class  Accel extends Linear
 		super pos, speed, farEnd, radius
 
 	nudgeIn: ->
-		prevPos = @pos
 		candidatePos = @pos + @speed
 		if ( distance = candidatePos - @radius) < 0
 			@pos = @radius
