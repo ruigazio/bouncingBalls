@@ -42,7 +42,7 @@ class  Accel extends Linear
 			@pos = @farEnd - @radius
 		else
 			@pos = candidatePos
-			return null
+			return 0
 
 		#if there is a bounce, return the ratio of the move in case of bouncing
 		# candidateDistance = Math.abs candidatePos - prevPos
@@ -51,11 +51,11 @@ class  Accel extends Linear
 
 	setNextPos: ->
 		nudgeRatio = @nudgeIn()
-		if nudgeRatio == null
-			@speed += @accel
-		else
+		if nudgeRatio
 			@speed -= @accel * nudgeRatio
 			@scaleSpeed -elasticity
+		else
+			@speed += @accel
 
 module.exports =
 	Linear: Linear
