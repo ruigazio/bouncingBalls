@@ -47,7 +47,6 @@ class Accel extends Linear {
   }
 
   nudgeIn() {
-    const prevPos = this.pos;
     const candidatePos = this.pos + this.speed;
     let distance = 0;
     if ((distance = candidatePos - this.radius) < 0) {
