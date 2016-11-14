@@ -24,8 +24,8 @@ Manager = (function() {
 
   Manager.prototype.clickHandler = function(e) {
     var x, y;
-    x = e.layerX - this.bbox.left;
-    y = e.layerY - this.bbox.top;
+    x = e.offsetX || (e.layerX - this.bbox.left);
+    y = e.offsetX || (e.layerY - this.bbox.top);
     return this.objs.push(new Ball(this.$canvas, this.ctx, x, y));
   };
 
