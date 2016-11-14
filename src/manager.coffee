@@ -19,8 +19,9 @@ class Manager
 		@fpsTime = 0
 
 	clickHandler: (e) ->
-		x = e.layerX - @bbox.left
-		y = e.layerY - @bbox.top
+		x = e.offsetX || (e.layerX - @bbox.left)
+		y = e.offsetY || (e.layerY - @bbox.top)
+		console.log x, y, e
 		@objs.push new Ball @$canvas, @ctx, x, y
 
 	#time in seconds between frames
